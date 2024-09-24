@@ -1,0 +1,20 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATASOURCE_URL:Word}
+    username: ${DATASOURCE_USERNAME:World}
+    password: ${DATASOURCE_PASSWORD:World}
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+logging:
+  level:
+    com.globaltechjsc.vanvietle.gradle_project: DEBUG
