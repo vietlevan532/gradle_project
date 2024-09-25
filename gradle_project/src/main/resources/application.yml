@@ -15,6 +15,9 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+jwt:
+  secret-key: ${JWT_SECRET_KEY:World}
+
 logging:
   level:
     com.globaltechjsc.vanvietle.gradle_project: DEBUG

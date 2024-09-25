@@ -19,10 +19,6 @@ public class BlogService {
 
     private final BlogRepository blogRepository;
 
-    private static class  BlogResourceException extends RuntimeException {
-        private BlogResourceException(String message) {super(message);}
-    }
-
     @Autowired
     public BlogService(BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
@@ -55,7 +51,7 @@ public class BlogService {
         log.info("Updating blog {}", blogRequest);
         Blog blog = blogRepository
                 .findById(blogRequest.getId())
-                .orElseThrow(() -> new BlogResourceException("Blog not found"));
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
         blog.setTitle(blogRequest.getTitle());
         blog.setContent(blogRequest.getContent());
         blog.setAuthor(blogRequest.getAuthor());
