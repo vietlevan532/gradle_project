@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "blogs")
 public class Blog {
@@ -26,4 +27,11 @@ public class Blog {
 
     @Column(name = "created_at",nullable = false)
     private String createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private String updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

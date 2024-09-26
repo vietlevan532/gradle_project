@@ -1,6 +1,7 @@
 package com.globaltechjsc.vanvietle.gradle_project.config.security;
 
 import com.globaltechjsc.vanvietle.gradle_project.config.jwt.JwtAuthenticationFilter;
+import com.globaltechjsc.vanvietle.gradle_project.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
-                                "/api/v1/blogs/**",
+                                "/api/v1/blogs/",
                                 "/api/v1/auth/**"
                         ).permitAll()
                         .anyRequest()

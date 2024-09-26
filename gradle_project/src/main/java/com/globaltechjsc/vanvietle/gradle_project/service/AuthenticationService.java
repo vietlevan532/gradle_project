@@ -7,6 +7,7 @@ import com.globaltechjsc.vanvietle.gradle_project.repository.UserRepository;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.AuthenticationRequest;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.AuthenticationResponse;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.SignUpRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,22 +17,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public AuthenticationService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-    }
 
     public AuthenticationResponse signUp(SignUpRequest request) {
         if (userRepository.findByUsername(request.getEmail().substring(0, request.getEmail().indexOf("@"))).isPresent()) {
@@ -60,6 +55,7 @@ public class AuthenticationService {
                     .image("https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg")
                     .status(true)
                     .role(Role.ROLE_USER)
+                    .blogs(new ArrayList<>())
                     .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("H:mm dd/MM/yyyy")))
                     .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("H:mm dd/MM/yyyy")))
                     .build();
@@ -81,10 +77,10 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getLogin())
                 .orElseGet(() -> userRepository.findByPhoneNumber(request.getLogin())
                         .orElseGet(() -> userRepository.findByUsername(request.getLogin())
-                                .orElseThrow(() -> new UsernameNotFoundException("Invalid login information or password"))));
-        var jwtToken = jwtService.generateToken(user, request.getLogin(), request.getRememberMe());
+                                .orElseThrow(() -> new IllegalArgumentException("Invalid login information or password!"))));
+        var jwtAccessToken = jwtService.generateToken(user , request.getLogin(), request.getRememberMe());
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .token(jwtAccessToken)
                 .build();
     }
 }

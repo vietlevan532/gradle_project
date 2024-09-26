@@ -4,6 +4,7 @@ import com.globaltechjsc.vanvietle.gradle_project.service.AuthenticationService;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.AuthenticationRequest;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.AuthenticationResponse;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.SignUpRequest;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/auth")
 public class AuthResource {
 
     private final Logger log = LoggerFactory.getLogger(AuthResource.class);
 
     private final AuthenticationService authenticationService;
-
-    @Autowired
-    public AuthResource(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
 
     private static class AuthResourceException extends RuntimeException {
         private AuthResourceException(String message) {super(message);}

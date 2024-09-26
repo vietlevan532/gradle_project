@@ -33,7 +33,7 @@ public class JwtService {
     }
 
     public String extractLogin(String token) {
-        return extractAllClaims(token).get("loginBy", String.class);
+        return extractAllClaims(token).get("login_by", String.class);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
