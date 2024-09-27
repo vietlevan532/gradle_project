@@ -15,6 +15,9 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+  elasticsearch:
+    uris: ${ELASTICSEARCH_SERVER_URI:World}
+
 jwt:
   secret-key: ${JWT_SECRET_KEY:World}
 

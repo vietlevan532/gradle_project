@@ -4,9 +4,10 @@ import com.globaltechjsc.vanvietle.gradle_project.domain.Blog;
 import com.globaltechjsc.vanvietle.gradle_project.domain.User;
 import com.globaltechjsc.vanvietle.gradle_project.repository.BlogRepository;
 import com.globaltechjsc.vanvietle.gradle_project.service.dto.BlogDTO;
+import com.globaltechjsc.vanvietle.gradle_project.service.es.BlogDocService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,16 +17,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BlogService {
 
     Logger log = LoggerFactory.getLogger(BlogService.class);
 
     private final BlogRepository blogRepository;
 
-    @Autowired
-    public BlogService(BlogRepository blogRepository) {
-        this.blogRepository = blogRepository;
-    }
+    private final BlogDocService blogDocumentService;
 
     public List<BlogDTO> getAllBlogs() {
         log.debug("Getting all blogs");
@@ -50,6 +49,9 @@ public class BlogService {
                 .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("H:mm dd/MM/yyyy")))
                 .build();
         blogRepository.save(newBlog);
+
+        blogDocumentService.saveBlogDoc(newBlog);
+
         return this.blogToBlogDTO(newBlog);
     }
 
